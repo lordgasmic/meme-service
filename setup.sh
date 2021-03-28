@@ -31,10 +31,12 @@ fi
 
 rm -rf config
 
+CURRWORDIR=$(pwd)
 cd src/main/java/com/lordgasmic
 mv SERVICE $PACKAGE_NAME
 cd $PACKAGE_NAME
 mv Application.java ${APP_NAME}Application.java
 
 # Goodbye, cruel world!
+cd $CURRWORDIR
 rm -- "$0"
