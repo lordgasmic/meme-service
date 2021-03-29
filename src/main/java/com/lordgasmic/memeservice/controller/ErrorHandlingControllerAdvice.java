@@ -1,7 +1,7 @@
-package com.lordgasmic.==PACKAGE_NAME==.controller;
+package com.lordgasmic.memeservice.controller;
 
-import com.lordgasmic.==PACKAGE_NAME==.model.ValidationErrorResponse;
-import com.lordgasmic.==PACKAGE_NAME==.model.Violation;
+import com.lordgasmic.memeservice.model.ValidationErrorResponse;
+import com.lordgasmic.memeservice.model.Violation;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

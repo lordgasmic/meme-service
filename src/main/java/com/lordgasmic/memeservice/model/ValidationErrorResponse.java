@@ -1,4 +1,4 @@
-package com.lordgasmic.==PACKAGE_NAME==.model;
+package com.lordgasmic.memeservice.model;
 
 import lombok.Data;
 

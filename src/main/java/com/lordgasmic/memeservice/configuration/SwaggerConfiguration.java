@@ -1,4 +1,4 @@
-package com.lordgasmic.==PACKAGE_NAME==.configuration;
+package com.lordgasmic.memeservice.configuration;
 
 import lombok.Generated;
 import org.springframework.context.annotation.Bean;
