@@ -47,9 +47,9 @@ public class MemeService {
         return response;
     }
 
-    public List<MemeResponse> getMemesByTag(MemeRequest request) {
-        List<TagEntity> tags = tagRepository.findByTag(request.getTag());
-        List<String> tagIds = tags.stream().map(tag -> tag.getPk().getId()).collect(toList());
+    public List<MemeResponse> getMemesByTag(String tag) {
+        List<TagEntity> tags = tagRepository.findByTag(tag);
+        List<String> tagIds = tags.stream().map(t -> t.getPk().getId()).collect(toList());
         List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
         List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
 

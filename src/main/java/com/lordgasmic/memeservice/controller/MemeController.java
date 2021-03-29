@@ -16,14 +16,14 @@ public class MemeController {
     @Autowired
     private MemeService service;
 
-    @GetMapping("/api/v1/memes/all")
+    @GetMapping("/api/v1/memes")
     public List<MemeResponse> getAllMemes(){
         return service.getAllMemes();
     }
 
-    @GetMapping("/api/v1/memes/tag")
-    public List<MemeResponse> getMemes(MemeRequest request){
-        return service.getMemesByTag(request);
+    @GetMapping("/api/v1/memes/tag/{tag}")
+    public List<MemeResponse> getMemes(@PathVariable String tag){
+        return service.getMemesByTag(tag);
     }
 
     @PutMapping("/api/v1/meme")
