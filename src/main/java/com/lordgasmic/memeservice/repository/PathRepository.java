@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PathRepository extends CrudRepository<PathEntity, String> {
 
-    List<PathEntity> findAllById(List<String> ids);
+    List<PathEntity> findAllByIdIn(List<String> ids);
 }

@@ -40,8 +40,8 @@ public class MemeService {
     public List<MemeResponse> getAllMemes() {
         List<MemeEntity> memes = memeRepository.findAll();
         List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
-        List<TagEntity> tags = tagRepository.findAllByPkId(memeIds);
-        List<PathEntity> paths = pathRepository.findAllById(memeIds);
+        List<TagEntity> tags = tagRepository.findAllByPkIdIn(memeIds);
+        List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
 
         Map<String, List<TagEntity>> tagMap = tags.stream().collect(groupingBy(tag -> tag.getPk().getId()));
         Map<String, String> pathMap = paths.stream().collect(toMap(PathEntity::getId, PathEntity::getPath));

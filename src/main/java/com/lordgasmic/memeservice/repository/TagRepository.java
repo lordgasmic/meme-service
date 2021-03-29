@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TagRepository extends CrudRepository<TagEntity, TagEntityPK> {
 
-    List<TagEntity> findAllByPkId(List<String> ids);
+    List<TagEntity> findAllByPkIdIn(List<String> ids);
 }
