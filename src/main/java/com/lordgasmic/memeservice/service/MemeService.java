@@ -2,6 +2,7 @@ package com.lordgasmic.memeservice.service;
 
 import com.lordgasmic.memeservice.entity.MemeEntity;
 import com.lordgasmic.memeservice.entity.PathEntity;
+import com.lordgasmic.memeservice.entity.RequestEntity;
 import com.lordgasmic.memeservice.entity.TagEntity;
 import com.lordgasmic.memeservice.model.CreateMemeRequest;
 import com.lordgasmic.memeservice.model.MemeRequest;
@@ -65,7 +66,8 @@ public class MemeService {
     }
 
     public void addMemeRequest(MemeRequestRequest request) {
-
+        RequestEntity entity = new RequestEntity(request.getName());
+        requestRepository.save(entity);
     }
 
     private void getMemeAttributesAndAssociate(List<String> memeIds,

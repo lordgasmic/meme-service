@@ -31,7 +31,7 @@ public class MemeController {
         service.addMeme(request);
     }
 
-    @PutMapping("/api/v1/memes/request")
+    @PutMapping("/api/v1/meme/request")
     public void addMemeRequest(MemeRequestRequest request){
         service.addMemeRequest(request);
     }
