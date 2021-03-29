@@ -1,5 +1,5 @@
 create table meme(
-    username nvarchar(255) NOT NULL,
+    id nvarchar(255) NOT NULL,
     CONSTRAINT meme_pk PRIMARY KEY (id)
 );
 create table meme_tag(
@@ -12,4 +12,7 @@ create table meme_path(
     id nvarchar(255) NOT NULL,
     path nvarchar(255) NOT NULL,
     CONSTRAINT meme_path_pk PRIMARY KEY (id)
+);
+create table meme_request(
+    name nvarchar(255) NOT NULL
 );

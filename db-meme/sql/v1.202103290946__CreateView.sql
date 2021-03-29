@@ -7,3 +7,6 @@ grant select, insert, update, delete on web.meme_tag_vw to 'web_appl'@'%';
 create or replace view meme_path_vw as select * from meme_path;
 grant select, insert, update, delete on web.meme_path_vw to 'web_appl'@'localhost';
 grant select, insert, update, delete on web.meme_path_vw to 'web_appl'@'%';
+create or replace view meme_request_vw as select * from meme_request;
+grant select, insert, update, delete on web.meme_request_vw to 'web_appl'@'localhost';
+grant select, insert, update, delete on web.meme_request_vw to 'web_appl'@'%';

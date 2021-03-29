@@ -14,6 +14,6 @@ import javax.persistence.Entity;
 public class TagEntity {
 
     @EmbeddedId
-    private TagEntityPK id;
+    private TagEntityPK pk;
     private String tag;
 }
