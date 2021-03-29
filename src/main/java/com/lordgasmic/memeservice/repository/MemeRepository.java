@@ -8,4 +8,6 @@ import java.util.List;
 public interface MemeRepository extends CrudRepository<MemeEntity, String> {
 
     List<MemeEntity> findAll();
+
+    List<MemeEntity> findByIdIn(List<String> ids);
 }

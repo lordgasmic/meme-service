@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -40,27 +39,25 @@ public class MemeService {
     public List<MemeResponse> getAllMemes() {
         List<MemeEntity> memes = memeRepository.findAll();
         List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
-        List<TagEntity> tags = tagRepository.findAllByPkIdIn(memeIds);
-        List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
-
-        Map<String, List<TagEntity>> tagMap = tags.stream().collect(groupingBy(tag -> tag.getPk().getId()));
-        Map<String, String> pathMap = paths.stream().collect(toMap(PathEntity::getId, PathEntity::getPath));
 
         List<MemeResponse> response = new ArrayList<>();
-        for (String s : memeIds) {
-            MemeResponse meme = new MemeResponse();
-            meme.setName(s);
-            meme.setTags(tagMap.get(s).stream().map(TagEntity::getTag).collect(toList()));
-            meme.setUrl(pathMap.get(s));
 
-            response.add(meme);
-        }
+        getMemeAttributesAndAssociate(memeIds, response);
 
         return response;
     }
 
     public List<MemeResponse> getMemesByTag(MemeRequest request) {
-        return null;
+        List<TagEntity> tags = tagRepository.findByTag(request.getTag());
+        List<String> tagIds = tags.stream().map(tag -> tag.getPk().getId()).collect(toList());
+        List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
+        List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
+
+        List<MemeResponse> response = new ArrayList<>();
+
+        getMemeAttributesAndAssociate(memeIds, response);
+
+        return response;
     }
 
     public void addMeme(CreateMemeRequest request) {
@@ -69,5 +66,22 @@ public class MemeService {
 
     public void addMemeRequest(MemeRequestRequest request) {
 
+    }
+
+    private void getMemeAttributesAndAssociate(List<String> memeIds,
+                                               List<MemeResponse> response) {
+        List<TagEntity> tags = tagRepository.findByPkIdIn(memeIds);
+        List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
+        Map<String, List<TagEntity>> tagMap = tags.stream().collect(groupingBy(tag -> tag.getPk().getId()));
+        Map<String, String> pathMap = paths.stream().collect(toMap(PathEntity::getId, PathEntity::getPath));
+
+        for (String s : memeIds) {
+            MemeResponse meme = new MemeResponse();
+            meme.setName(s);
+            meme.setTags(tagMap.get(s).stream().map(TagEntity::getTag).collect(toList()));
+            meme.setUrl(pathMap.get(s));
+
+            response.add(meme);
+        }
     }
 }
