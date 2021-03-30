@@ -1,16 +1,18 @@
 package com.lordgasmic.memeservice.controller;
 
 import com.lordgasmic.memeservice.model.CreateMemeRequest;
-import com.lordgasmic.memeservice.model.MemeRequest;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
 import com.lordgasmic.memeservice.service.MemeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
+@Slf4j
 public class MemeController {
 
     @Autowired
@@ -27,8 +29,9 @@ public class MemeController {
     }
 
     @PutMapping("/api/v1/meme")
-    public void addMeme(CreateMemeRequest request){
-        service.addMeme(request);
+    public void addMeme(@RequestParam("file")MultipartFile file){
+        log.info("------------- " + file.getName());
+        //service.addMeme(null);
     }
 
     @PutMapping("/api/v1/meme/request")
