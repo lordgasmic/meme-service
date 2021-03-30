@@ -14,5 +14,7 @@ create table meme_path(
     CONSTRAINT meme_path_pk PRIMARY KEY (id)
 );
 create table meme_request(
-    name nvarchar(255) NOT NULL
+    id int NOT NULL AUTO_INCREMENT,
+    name nvarchar(255) NOT NULL,
+    CONSTRAINT meme_request_pk PRIMARY KEY (id)
 );

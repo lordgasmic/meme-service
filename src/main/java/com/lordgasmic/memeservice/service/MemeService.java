@@ -66,7 +66,8 @@ public class MemeService {
     }
 
     public void addMemeRequest(MemeRequestRequest request) {
-        RequestEntity entity = new RequestEntity(request.getName());
+        RequestEntity entity = new RequestEntity();
+        entity.setName(request.getName());
         requestRepository.save(entity);
     }
 
