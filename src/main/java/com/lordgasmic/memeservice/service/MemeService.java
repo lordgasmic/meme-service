@@ -12,6 +12,7 @@ import com.lordgasmic.memeservice.repository.MemeRepository;
 import com.lordgasmic.memeservice.repository.PathRepository;
 import com.lordgasmic.memeservice.repository.RequestRepository;
 import com.lordgasmic.memeservice.repository.TagRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.*;
 
 @Service
+@Slf4j
 public class MemeService {
 
     @Autowired
@@ -66,6 +68,7 @@ public class MemeService {
     }
 
     public void addMemeRequest(MemeRequestRequest request) {
+        log.info("request = " + request);
         RequestEntity entity = new RequestEntity();
         entity.setName(request.getName());
         requestRepository.save(entity);
