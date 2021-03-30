@@ -1,6 +1,5 @@
 package com.lordgasmic.memeservice.controller;
 
-import com.lordgasmic.memeservice.model.CreateMemeRequest;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
 import com.lordgasmic.memeservice.service.MemeService;
@@ -28,7 +27,7 @@ public class MemeController {
         return service.getMemesByTag(tag);
     }
 
-    @PutMapping("/api/v1/meme")
+    @PostMapping("/api/v1/meme")
     public void addMeme(@RequestParam("file")MultipartFile file){
         log.info("------------- " + file.getName());
         //service.addMeme(null);
