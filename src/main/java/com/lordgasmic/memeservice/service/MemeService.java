@@ -68,7 +68,7 @@ public class MemeService {
     }
 
     public void addMeme(MultipartFile file) throws IOException {
-        File f = new File("/app/" + file.getOriginalFilename());
+        File f = new File("/vol/" + file.getOriginalFilename());
         file.transferTo(f);
     }
 
