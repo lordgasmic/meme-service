@@ -30,6 +30,9 @@ public class MemeController {
     @PostMapping("/api/v1/meme")
     public void addMeme(@RequestParam("file")MultipartFile file){
         log.info("------------- " + file.getName());
+        log.info("------------- " + file.getOriginalFilename());
+        log.info("------------- " + file.getContentType());
+        log.info("------------- " + file.getSize());
         //service.addMeme(null);
     }
 
