@@ -32,7 +32,7 @@ public class MemeController {
     }
 
     @PutMapping("/api/v1/meme/request")
-    public void addMemeRequest(MemeRequestRequest request){
+    public void addMemeRequest(@RequestBody MemeRequestRequest request){
         service.addMemeRequest(request);
     }
 }
