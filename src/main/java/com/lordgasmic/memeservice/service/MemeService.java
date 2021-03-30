@@ -15,7 +15,11 @@ import com.lordgasmic.memeservice.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +67,9 @@ public class MemeService {
         return response;
     }
 
-    public void addMeme(CreateMemeRequest request) {
-
+    public void addMeme(MultipartFile file) throws IOException {
+        File f = new File("/app/" + file.getOriginalFilename());
+        file.transferTo(f);
     }
 
     public void addMemeRequest(MemeRequestRequest request) {

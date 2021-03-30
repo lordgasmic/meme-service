@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,12 +29,8 @@ public class MemeController {
     }
 
     @PostMapping("/api/v1/meme")
-    public void addMeme(@RequestParam("file")MultipartFile file){
-        log.info("------------- " + file.getName());
-        log.info("------------- " + file.getOriginalFilename());
-        log.info("------------- " + file.getContentType());
-        log.info("------------- " + file.getSize());
-        //service.addMeme(null);
+    public void addMeme(@RequestParam("file")MultipartFile file) throws IOException {
+        service.addMeme(file);
     }
 
     @PutMapping("/api/v1/meme/request")
