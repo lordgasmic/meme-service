@@ -19,22 +19,27 @@ public class MemeController {
     private MemeService service;
 
     @GetMapping("/api/v1/memes")
-    public List<MemeResponse> getAllMemes(){
+    public List<MemeResponse> getAllMemes() {
         return service.getAllMemes();
     }
 
     @GetMapping("/api/v1/memes/tag/{tag}")
-    public List<MemeResponse> getMemes(@PathVariable String tag){
+    public List<MemeResponse> getMemes(@PathVariable String tag) {
         return service.getMemesByTag(tag);
     }
 
     @PostMapping("/api/v1/meme")
-    public void addMeme(@RequestParam("file")MultipartFile file) throws IOException {
+    public void addMeme(@RequestParam("file") MultipartFile file) throws IOException {
         service.addMeme(file);
     }
 
     @PutMapping("/api/v1/meme/request")
-    public void addMemeRequest(@RequestBody MemeRequestRequest request){
+    public void addMemeRequest(@RequestBody MemeRequestRequest request) {
         service.addMemeRequest(request);
+    }
+
+    @PutMapping("/api/v1/index")
+    public void updateIndex() throws IOException, InterruptedException {
+        service.updateIndex();
     }
 }

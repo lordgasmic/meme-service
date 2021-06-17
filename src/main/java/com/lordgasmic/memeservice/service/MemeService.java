@@ -1,13 +1,13 @@
 package com.lordgasmic.memeservice.service;
 
+import com.google.gson.Gson;
 import com.lordgasmic.memeservice.entity.MemeEntity;
 import com.lordgasmic.memeservice.entity.PathEntity;
 import com.lordgasmic.memeservice.entity.RequestEntity;
 import com.lordgasmic.memeservice.entity.TagEntity;
-import com.lordgasmic.memeservice.model.CreateMemeRequest;
-import com.lordgasmic.memeservice.model.MemeRequest;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
+import com.lordgasmic.memeservice.model.solr.*;
 import com.lordgasmic.memeservice.repository.MemeRepository;
 import com.lordgasmic.memeservice.repository.PathRepository;
 import com.lordgasmic.memeservice.repository.RequestRepository;
@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,7 @@ public class MemeService {
     @Autowired
     private RequestRepository requestRepository;
 
+    private static final Gson gson = new Gson();
 
     public List<MemeResponse> getAllMemes() {
         List<MemeEntity> memes = memeRepository.findAll();
@@ -79,8 +83,29 @@ public class MemeService {
         requestRepository.save(entity);
     }
 
-    private void getMemeAttributesAndAssociate(List<String> memeIds,
-                                               List<MemeResponse> response) {
+    public void updateIndex() throws IOException, InterruptedException {
+        List<TagEntity> tags = tagRepository.findAll();
+        List<Doc> docs = tags.stream().map(Doc::fromTagEntity).collect(toList());
+
+        Update update = new Update();
+        update.setDelete(new Delete());
+        update.setAdd(new Add(docs));
+        update.setCommit(new Commit());
+
+        HttpRequest request = HttpRequest.newBuilder()
+                                         .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(update)))
+                                         .uri(URI.create("172.16.0.51:8983/solr/memes/update"))
+                                         .header("Content-Type", "application/json")
+                                         .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        SolrResponse solrResponse = gson.fromJson(response.body(), SolrResponse.class);
+        
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(solrResponse.toString());
+        }
+    }
+
+    private void getMemeAttributesAndAssociate(List<String> memeIds, List<MemeResponse> response) {
         List<TagEntity> tags = tagRepository.findByPkIdIn(memeIds);
         List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
         Map<String, List<TagEntity>> tagMap = tags.stream().collect(groupingBy(tag -> tag.getPk().getId()));

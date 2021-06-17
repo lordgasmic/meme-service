@@ -11,4 +11,6 @@ public interface TagRepository extends CrudRepository<TagEntity, TagEntityPK> {
     List<TagEntity> findByPkIdIn(List<String> ids);
 
     List<TagEntity> findByTag(String tag);
+
+    List<TagEntity> findAll();
 }
