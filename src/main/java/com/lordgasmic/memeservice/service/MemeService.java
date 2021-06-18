@@ -89,7 +89,7 @@ public class MemeService {
 
         Update update = new Update();
         update.setDelete(new Delete());
-        update.setAdd(new Add(docs));
+        update.setAdd(docs);
         update.setCommit(new Commit());
 
         String body = gson.toJson(update);

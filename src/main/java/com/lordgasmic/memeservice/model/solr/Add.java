@@ -8,5 +8,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Add {
-    private List<Doc> docs;
+    private List<Doc> doc;
 }
