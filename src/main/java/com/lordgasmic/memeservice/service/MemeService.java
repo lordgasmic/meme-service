@@ -96,7 +96,7 @@ public class MemeService {
         log.info("body " + body);
         HttpRequest request = HttpRequest.newBuilder()
                                          .POST(HttpRequest.BodyPublishers.ofString(body))
-                                         .uri(URI.create("172.16.0.51:8983/solr/memes/update"))
+                                         .uri(URI.create("http://172.16.0.51:8983/solr/memes/update"))
                                          .header("Content-Type", "application/json")
                                          .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
