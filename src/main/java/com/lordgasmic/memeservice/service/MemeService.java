@@ -7,22 +7,24 @@ import com.lordgasmic.memeservice.entity.RequestEntity;
 import com.lordgasmic.memeservice.entity.TagEntity;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
-import com.lordgasmic.memeservice.model.solr.*;
+import com.lordgasmic.memeservice.model.solr.Commit;
+import com.lordgasmic.memeservice.model.solr.Delete;
+import com.lordgasmic.memeservice.model.solr.Doc;
+import com.lordgasmic.memeservice.model.solr.Update;
 import com.lordgasmic.memeservice.repository.MemeRepository;
 import com.lordgasmic.memeservice.repository.PathRepository;
 import com.lordgasmic.memeservice.repository.RequestRepository;
 import com.lordgasmic.memeservice.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +85,7 @@ public class MemeService {
         requestRepository.save(entity);
     }
 
-    public void updateIndex() throws IOException, InterruptedException {
+    public void updateIndex() throws IOException, InterruptedException, SolrServerException {
         List<TagEntity> tags = tagRepository.findAll();
         List<Doc> docs = tags.stream().map(Doc::fromTagEntity).collect(toList());
 
@@ -93,25 +95,12 @@ public class MemeService {
         update.setCommit(new Commit());
 
         String body = gson.toJson(update);
-        log.info("body " + body);
-        HttpRequest request = HttpRequest.newBuilder()
-                                         .POST(HttpRequest.BodyPublishers.ofString("{\"delete\":{\"query\":\"*:*\"},\"commit\":{}}"))
-                                         .uri(URI.create("http://172.16.0.51:8983/solr/memes/update"))
-                                         .header("Content-Type", "application/json")
-                                         .build();
-        //        HttpRequest request = HttpRequest.newBuilder()
-        //                                         .POST(HttpRequest.BodyPublishers.ofString(body))
-        //                                         .uri(URI.create("http://172.16.0.51:8983/solr/memes/update"))
-        //                                         .header("Content-Type", "application/json")
-        //                                         .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        log.info("post request");
-        SolrResponse solrResponse = gson.fromJson(response.body(), SolrResponse.class);
 
-        log.info("seriliaize");
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(solrResponse.toString());
-        }
+        HttpSolrClient client = new HttpSolrClient.Builder("http://172.16.0.51:8983/solr/memes").build();
+        UpdateResponse response = client.deleteByQuery("*:*");
+        log.info("update response " + gson.toJson(response));
+        UpdateResponse res = client.commit();
+        log.info("commit resposnen " + gson.toJson(res));
     }
 
     private void getMemeAttributesAndAssociate(List<String> memeIds, List<MemeResponse> response) {
