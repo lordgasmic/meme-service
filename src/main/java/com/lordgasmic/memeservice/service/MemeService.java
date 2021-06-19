@@ -96,7 +96,7 @@ public class MemeService {
 
         String body = gson.toJson(update);
 
-        HttpSolrClient client = new HttpSolrClient.Builder("http://172.16.0.51:8983/solr/memes").build();
+        HttpSolrClient client = new HttpSolrClient.Builder("http://172.17.0.1:8983/solr/memes").build();
         UpdateResponse response = client.deleteByQuery("*:*");
         log.info("update response " + gson.toJson(response));
         UpdateResponse res = client.commit();
