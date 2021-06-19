@@ -100,8 +100,10 @@ public class MemeService {
                                          .header("Content-Type", "application/json")
                                          .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        log.info("post request");
         SolrResponse solrResponse = gson.fromJson(response.body(), SolrResponse.class);
 
+        log.info("seriliaize");
         if (response.statusCode() != 200) {
             throw new RuntimeException(solrResponse.toString());
         }
