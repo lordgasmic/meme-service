@@ -4,6 +4,7 @@ import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
 import com.lordgasmic.memeservice.service.MemeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +40,7 @@ public class MemeController {
     }
 
     @PutMapping("/api/v1/index")
-    public void updateIndex() throws IOException, InterruptedException {
+    public void updateIndex() throws IOException, InterruptedException, SolrServerException {
         service.updateIndex();
     }
 }
