@@ -98,9 +98,10 @@ public class MemeService {
 
         HttpSolrClient client = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
         UpdateResponse response = client.deleteByQuery("*:*");
-        log.info("update response " + gson.toJson(response));
+
+        client.addBeans(docs);
+
         UpdateResponse res = client.commit();
-        log.info("commit resposnen " + gson.toJson(res));
     }
 
     private void getMemeAttributesAndAssociate(List<String> memeIds, List<MemeResponse> response) {
