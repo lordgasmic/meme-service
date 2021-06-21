@@ -7,10 +7,7 @@ import com.lordgasmic.memeservice.entity.RequestEntity;
 import com.lordgasmic.memeservice.entity.TagEntity;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
-import com.lordgasmic.memeservice.model.solr.Commit;
-import com.lordgasmic.memeservice.model.solr.Delete;
 import com.lordgasmic.memeservice.model.solr.Doc;
-import com.lordgasmic.memeservice.model.solr.Update;
 import com.lordgasmic.memeservice.repository.MemeRepository;
 import com.lordgasmic.memeservice.repository.PathRepository;
 import com.lordgasmic.memeservice.repository.RequestRepository;
@@ -26,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,17 +87,19 @@ public class MemeService {
         List<TagEntity> tags = tagRepository.findAll();
         List<Doc> docs = tags.stream().map(Doc::fromTagEntity).collect(toList());
 
-        Update update = new Update();
-        update.setDelete(new Delete());
-        update.setAdd(docs);
-        update.setCommit(new Commit());
+        Map<String, List<String>> docMap = new HashMap<>();
+        for (Doc doc : docs) {
+            docMap.computeIfAbsent(doc.getId(), k -> new ArrayList<>());
 
-        String body = gson.toJson(update);
+            docMap.get(doc.getId()).add(doc.getTag());
+        }
+
+        log.info(docMap.toString());
 
         HttpSolrClient client = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
         UpdateResponse response = client.deleteByQuery("*:*");
 
-        client.addBeans(docs);
+        //        client.addBeans(docMap);
 
         UpdateResponse res = client.commit();
     }
