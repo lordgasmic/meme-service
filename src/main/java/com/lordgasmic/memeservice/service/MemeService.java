@@ -15,7 +15,6 @@ import com.lordgasmic.memeservice.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,23 +84,25 @@ public class MemeService {
 
     public void updateIndex() throws IOException, InterruptedException, SolrServerException {
         List<TagEntity> tags = tagRepository.findAll();
-        List<Doc> docs = tags.stream().map(Doc::fromTagEntity).collect(toList());
 
-        Map<String, List<String>> docMap = new HashMap<>();
-        for (Doc doc : docs) {
-            docMap.computeIfAbsent(doc.getId(), k -> new ArrayList<>());
+        Map<String, List<String>> tagMap = new HashMap<>();
+        for (TagEntity tag : tags) {
+            tagMap.computeIfAbsent(tag.getPk().getId(), k -> new ArrayList<>());
 
-            docMap.get(doc.getId()).add(doc.getTag());
+            tagMap.get(tag.getPk().getId()).add(tag.getTag());
         }
 
-        log.info(docMap.toString());
+        List<Doc> docs = new ArrayList<>();
+        for (String key : tagMap.keySet()) {
+            docs.add(new Doc(key, tagMap.get(key)));
+        }
 
         HttpSolrClient client = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
-        UpdateResponse response = client.deleteByQuery("*:*");
+        client.deleteByQuery("*:*");
 
-        //        client.addBeans(docMap);
+        client.addBeans(docs);
 
-        UpdateResponse res = client.commit();
+        client.commit();
     }
 
     private void getMemeAttributesAndAssociate(List<String> memeIds, List<MemeResponse> response) {
