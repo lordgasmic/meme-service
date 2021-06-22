@@ -82,7 +82,7 @@ public class MemeService {
         requestRepository.save(entity);
     }
 
-    public void updateIndex() throws IOException, InterruptedException, SolrServerException {
+    public void updateIndex() throws IOException, SolrServerException {
         List<TagEntity> tags = tagRepository.findAll();
 
         Map<String, List<String>> tagMap = new HashMap<>();
