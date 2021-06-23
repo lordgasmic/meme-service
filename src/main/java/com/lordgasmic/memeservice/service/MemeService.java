@@ -69,14 +69,14 @@ public class MemeService {
         Map<String, String> queryParamMap = new HashMap<>();
         queryParamMap.put("q", "tag:" + tag);
         QueryResponse solrResponse = solrClient.query(new MapSolrParams(queryParamMap));
-        log.info(solrResponse.getResults().toString());
-        //        List<String> tagIds = solrResponse.getgetBeans(Doc.class).stream().map(Doc::getId).collect(toList());
-        //        List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
-        //        List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
+
+        List<String> tagIds = solrResponse.getResults().stream().map(d -> (String) d.get("id")).collect(toList());
+        List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
+        List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
 
         List<MemeResponse> response = new ArrayList<>();
 
-        //        getMemeAttributesAndAssociate(memeIds, response);
+        getMemeAttributesAndAssociate(memeIds, response);
 
         return response;
     }
