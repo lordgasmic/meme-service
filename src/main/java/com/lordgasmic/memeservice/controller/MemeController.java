@@ -25,7 +25,7 @@ public class MemeController {
     }
 
     @GetMapping("/api/v1/memes/tag/{tag}")
-    public List<MemeResponse> getMemes(@PathVariable String tag) {
+    public List<MemeResponse> getMemes(@PathVariable String tag) throws IOException, SolrServerException {
         return service.getMemesByTag(tag);
     }
 
