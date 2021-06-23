@@ -15,6 +15,8 @@ import com.lordgasmic.memeservice.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.MapSolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +46,12 @@ public class MemeService {
     @Autowired
     private RequestRepository requestRepository;
 
+    private HttpSolrClient solrClient;
+
+    public MemeService() {
+        solrClient = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
+    }
+
     private static final Gson gson = new Gson();
 
     public List<MemeResponse> getAllMemes() {
@@ -57,9 +65,11 @@ public class MemeService {
         return response;
     }
 
-    public List<MemeResponse> getMemesByTag(String tag) {
-        List<TagEntity> tags = tagRepository.findByTag(tag);
-        List<String> tagIds = tags.stream().map(t -> t.getPk().getId()).collect(toList());
+    public List<MemeResponse> getMemesByTag(String tag) throws IOException, SolrServerException {
+        Map<String, String> queryParamMap = new HashMap<>();
+        queryParamMap.put("q", "tag:" + tag);
+        QueryResponse solrResponse = solrClient.query(new MapSolrParams(queryParamMap));
+        List<String> tagIds = solrResponse.getBeans(Doc.class).stream().map(Doc::getId).collect(toList());
         List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
         List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());
 
@@ -97,12 +107,11 @@ public class MemeService {
             docs.add(new Doc(key, tagMap.get(key)));
         }
 
-        HttpSolrClient client = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
-        client.deleteByQuery("*:*");
+        solrClient.deleteByQuery("*:*");
 
-        client.addBeans(docs);
+        solrClient.addBeans(docs);
 
-        client.commit();
+        solrClient.commit();
     }
 
     private void getMemeAttributesAndAssociate(List<String> memeIds, List<MemeResponse> response) {
