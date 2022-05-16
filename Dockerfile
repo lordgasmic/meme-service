@@ -1,5 +1,4 @@
-#FROM openjdk:11
-FROM openjdk:11.0.12-jre
+FROM lordgasmic/jre14
 WORKDIR /vol
 WORKDIR /app
 
