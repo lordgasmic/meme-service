@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -16,5 +17,6 @@ public class PathEntity {
     @Id
     private String id;
     private String path;
+    @Column(name = "thumbnail_path")
     private String thumbnailPath;
 }
