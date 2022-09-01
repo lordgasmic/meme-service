@@ -130,8 +130,7 @@ public class MemeService {
             meme.setTags(tagMap.get(s).stream().map(TagEntity::getTag).collect(toList()));
             meme.setUrl(pathMap.get(s));
             meme.setThumbnailUrl(thumbnailPathMap.get(s));
-            log.info("meme: {}", meme);
-            
+
             response.add(meme);
         }
     }
