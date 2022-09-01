@@ -16,4 +16,5 @@ public class PathEntity {
     @Id
     private String id;
     private String path;
+    private String thumbnailPath;
 }

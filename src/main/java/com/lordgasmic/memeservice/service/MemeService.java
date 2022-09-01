@@ -122,12 +122,14 @@ public class MemeService {
         final List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
         final Map<String, List<TagEntity>> tagMap = tags.stream().collect(groupingBy(tag -> tag.getPk().getId()));
         final Map<String, String> pathMap = paths.stream().collect(toMap(PathEntity::getId, PathEntity::getPath));
+        final Map<String, String> thumbnailPathMap = paths.stream().collect(toMap(PathEntity::getId, PathEntity::getThumbnailPath));
 
         for (final String s : memeIds) {
             final MemeResponse meme = new MemeResponse();
             meme.setName(s);
             meme.setTags(tagMap.get(s).stream().map(TagEntity::getTag).collect(toList()));
             meme.setUrl(pathMap.get(s));
+            meme.setThumbnailUrl(thumbnailPathMap.get(s));
 
             response.add(meme);
         }
