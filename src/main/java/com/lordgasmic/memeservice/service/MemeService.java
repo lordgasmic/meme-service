@@ -13,8 +13,9 @@ import com.lordgasmic.memeservice.repository.PathRepository;
 import com.lordgasmic.memeservice.repository.RequestRepository;
 import com.lordgasmic.memeservice.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.Http2SolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.MapSolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +37,27 @@ import static java.util.stream.Collectors.toMap;
 @Slf4j
 public class MemeService {
 
-    @Autowired
-    private MemeRepository memeRepository;
+    private final MemeRepository memeRepository;
+
+    private final TagRepository tagRepository;
+
+    private final PathRepository pathRepository;
+
+    private final RequestRepository requestRepository;
+
+    private final SolrClient solrClient;
 
     @Autowired
-    private TagRepository tagRepository;
+    public MemeService(final MemeRepository memeRepository,
+                       final TagRepository tagRepository,
+                       final PathRepository pathRepository,
+                       final RequestRepository requestRepository) {
+        this.memeRepository = memeRepository;
+        this.tagRepository = tagRepository;
+        this.pathRepository = pathRepository;
+        this.requestRepository = requestRepository;
 
-    @Autowired
-    private PathRepository pathRepository;
-
-    @Autowired
-    private RequestRepository requestRepository;
-
-    private final HttpSolrClient solrClient;
-
-    public MemeService() {
-        solrClient = new HttpSolrClient.Builder("http://solr:8983/solr/memes").build();
+        solrClient = new Http2SolrClient.Builder("http://solr:8983/solr/memes").build();
     }
 
     private static final Gson gson = new Gson();
@@ -71,7 +77,6 @@ public class MemeService {
         final Map<String, String> queryParamMap = new HashMap<>();
         queryParamMap.put("q", "tag:" + tag);
         final QueryResponse solrResponse = solrClient.query(new MapSolrParams(queryParamMap));
-
         final List<String> tagIds = solrResponse.getResults().stream().map(d -> (String) d.get("id")).collect(toList());
         final List<MemeEntity> memes = memeRepository.findByIdIn(tagIds);
         final List<String> memeIds = memes.stream().map(MemeEntity::getId).collect(toList());

@@ -2,6 +2,8 @@ package com.lordgasmic.memeservice.controller;
 
 import com.lordgasmic.memeservice.model.ValidationErrorResponse;
 import com.lordgasmic.memeservice.model.Violation;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,9 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
@@ -37,13 +36,13 @@ public class ErrorHandlingControllerAdvice {
         }
         return error;
     }
-//
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-//    @ResponseBody
-//    ValidationErrorResponse onException(final Exception e) {
-//        final ValidationErrorResponse error = new ValidationErrorResponse();
-//        error.getViolations().add(new Violation(e, fieldError.getDefaultMessage()));
-//        return error;
-//    }
+    //
+    //    @ExceptionHandler(Exception.class)
+    //    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    //    @ResponseBody
+    //    ValidationErrorResponse onException(final Exception e) {
+    //        final ValidationErrorResponse error = new ValidationErrorResponse();
+    //        error.getViolations().add(new Violation(e, fieldError.getDefaultMessage()));
+    //        return error;
+    //    }
 }

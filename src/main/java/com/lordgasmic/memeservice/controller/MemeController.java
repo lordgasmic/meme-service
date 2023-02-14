@@ -6,7 +6,13 @@ import com.lordgasmic.memeservice.service.MemeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,8 +22,12 @@ import java.util.List;
 @Slf4j
 public class MemeController {
 
+    private final MemeService service;
+
     @Autowired
-    private MemeService service;
+    public MemeController(final MemeService service) {
+        this.service = service;
+    }
 
     @GetMapping("/api/v1/memes")
     public List<MemeResponse> getAllMemes() {
@@ -25,17 +35,17 @@ public class MemeController {
     }
 
     @GetMapping("/api/v1/memes/tag/{tag}")
-    public List<MemeResponse> getMemes(@PathVariable String tag) throws IOException, SolrServerException {
+    public List<MemeResponse> getMemes(@PathVariable final String tag) throws IOException, SolrServerException {
         return service.getMemesByTag(tag);
     }
 
     @PostMapping("/api/v1/meme")
-    public void addMeme(@RequestParam("file") MultipartFile file) throws IOException {
+    public void addMeme(@RequestParam("file") final MultipartFile file) throws IOException {
         service.addMeme(file);
     }
 
     @PutMapping("/api/v1/meme/request")
-    public void addMemeRequest(@RequestBody MemeRequestRequest request) {
+    public void addMemeRequest(@RequestBody final MemeRequestRequest request) {
         service.addMemeRequest(request);
     }
 
