@@ -132,7 +132,7 @@ public class MemeService {
         for (Map.Entry<String, Long> entry : aggFacets.entrySet()) {
             facets.add(new FacetsResponse(entry.getKey(), entry.getValue()));
         }
-        facets.sort(Comparator.comparingLong(FacetsResponse::getCount));
+        facets.sort(Comparator.comparingLong(FacetsResponse::getCount).reversed());
         return facets;
     }
 
