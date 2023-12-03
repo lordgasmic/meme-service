@@ -1,11 +1,11 @@
 package com.lordgasmic.memeservice.service;
 
 import com.google.gson.Gson;
-import com.lordgasmic.memeservice.entity.Facets;
 import com.lordgasmic.memeservice.entity.MemeEntity;
 import com.lordgasmic.memeservice.entity.PathEntity;
 import com.lordgasmic.memeservice.entity.RequestEntity;
 import com.lordgasmic.memeservice.entity.TagEntity;
+import com.lordgasmic.memeservice.model.FacetsResponse;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
 import com.lordgasmic.memeservice.model.solr.Doc;
@@ -27,8 +27,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -123,8 +125,17 @@ public class MemeService {
         solrClient.commit();
     }
 
-    public List<Facets> getFacets() {
-        return tagRepository.derp();
+    public List<FacetsResponse> getFacets() {
+        List<TagEntity> entities = tagRepository.findAll();
+        Map<String, Long> aggFacets = entities.stream().collect(Collectors.groupingBy(TagEntity::getTag, Collectors.counting()));
+        List<FacetsResponse> facets = new ArrayList<>();
+        Iterator<Map.Entry<String, Long>> it = aggFacets.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Long> entry = it.next();
+            facets.add(new FacetsResponse(entry.getKey(), entry.getValue()));
+        }
+
+        return facets;
     }
 
     private void getMemeAttributesAndAssociate(final List<String> memeIds, final List<MemeResponse> response) {

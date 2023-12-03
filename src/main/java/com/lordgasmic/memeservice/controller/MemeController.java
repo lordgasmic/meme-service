@@ -1,6 +1,6 @@
 package com.lordgasmic.memeservice.controller;
 
-import com.lordgasmic.memeservice.entity.Facets;
+import com.lordgasmic.memeservice.model.FacetsResponse;
 import com.lordgasmic.memeservice.model.MemeRequestRequest;
 import com.lordgasmic.memeservice.model.MemeResponse;
 import com.lordgasmic.memeservice.service.MemeService;
@@ -56,7 +56,7 @@ public class MemeController {
     }
 
     @GetMapping("/api/v1/memes/facets")
-    public List<Facets> getFacets() {
+    public List<FacetsResponse> getFacets() {
         return service.getFacets();
     }
 }
