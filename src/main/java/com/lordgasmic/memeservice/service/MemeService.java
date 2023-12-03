@@ -123,7 +123,7 @@ public class MemeService {
     }
 
     public List<TagEntity> getFacets() {
-        return tagRepository.findDistinctByTag();
+        return tagRepository.countDistinctTag();
     }
 
     private void getMemeAttributesAndAssociate(final List<String> memeIds, final List<MemeResponse> response) {
