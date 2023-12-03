@@ -124,7 +124,7 @@ public class MemeService {
     }
 
     public List<Facets> getFacets() {
-        return tagRepository.getFacets();
+        return tagRepository.countDistinctTag();
     }
 
     private void getMemeAttributesAndAssociate(final List<String> memeIds, final List<MemeResponse> response) {

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Facets extends TagEntity {
-    private int count;
+public class Facets {
+    private String tag;
+    private String count;
 }
