@@ -15,5 +15,5 @@ public interface TagRepository extends CrudRepository<TagEntity, TagEntityPK> {
     List<TagEntity> findAll();
 
     //    @Query("select distinct tag, count(tag) as count from meme_tag_vw group by tag order by count desc")
-    List<TagEntity> countDistinctTag();
+    List<TagEntity> findDistinctByTag();
 }
