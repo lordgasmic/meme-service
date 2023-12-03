@@ -26,8 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -129,12 +129,10 @@ public class MemeService {
         List<TagEntity> entities = tagRepository.findAll();
         Map<String, Long> aggFacets = entities.stream().collect(Collectors.groupingBy(TagEntity::getTag, Collectors.counting()));
         List<FacetsResponse> facets = new ArrayList<>();
-        Iterator<Map.Entry<String, Long>> it = aggFacets.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Long> entry = it.next();
+        for (Map.Entry<String, Long> entry : aggFacets.entrySet()) {
             facets.add(new FacetsResponse(entry.getKey(), entry.getValue()));
         }
-
+        facets.sort(Comparator.comparingLong(FacetsResponse::getCount));
         return facets;
     }
 
