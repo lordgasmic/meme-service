@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Facets {
     private String tag;
-    private String count;
+    //    private String count;
 }
