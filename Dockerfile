@@ -1,4 +1,4 @@
-FROM lordgasmic/jre14
+FROM lordgasmic/jre17
 WORKDIR /vol
 WORKDIR /app
 
