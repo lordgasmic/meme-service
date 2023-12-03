@@ -1,5 +1,6 @@
 package com.lordgasmic.memeservice.repository;
 
+import com.lordgasmic.memeservice.entity.Facets;
 import com.lordgasmic.memeservice.entity.TagEntity;
 import com.lordgasmic.memeservice.entity.TagEntityPK;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,5 @@ public interface TagRepository extends CrudRepository<TagEntity, TagEntityPK> {
     List<TagEntity> findAll();
 
     @Query("select distinct tag, count(tag) as count from meme_tag_vw group by tag order by count desc")
-    List<Object> getFacets();
+    List<Facets> getFacets();
 }
