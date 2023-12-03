@@ -55,7 +55,7 @@ public class MemeController {
         service.updateIndex();
     }
 
-    @GetMapping("/api/v1/meme/facets")
+    @GetMapping("/api/v1/memes/facets")
     public List<Facets> getFacets() {
         return service.getFacets();
     }
