@@ -53,4 +53,9 @@ public class MemeController {
     public void updateIndex() throws IOException, InterruptedException, SolrServerException {
         service.updateIndex();
     }
+
+    @GetMapping("/api/v1/meme/facets")
+    public List<Object> getFacets() {
+        return service.getFacets();
+    }
 }

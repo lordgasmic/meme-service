@@ -122,6 +122,10 @@ public class MemeService {
         solrClient.commit();
     }
 
+    public List<Object> getFacets() {
+        return tagRepository.getFacets();
+    }
+
     private void getMemeAttributesAndAssociate(final List<String> memeIds, final List<MemeResponse> response) {
         final List<TagEntity> tags = tagRepository.findByPkIdIn(memeIds);
         final List<PathEntity> paths = pathRepository.findAllByIdIn(memeIds);
