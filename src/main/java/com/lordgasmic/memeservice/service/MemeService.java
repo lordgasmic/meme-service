@@ -1,6 +1,7 @@
 package com.lordgasmic.memeservice.service;
 
 import com.google.gson.Gson;
+import com.lordgasmic.memeservice.entity.Facets;
 import com.lordgasmic.memeservice.entity.MemeEntity;
 import com.lordgasmic.memeservice.entity.PathEntity;
 import com.lordgasmic.memeservice.entity.RequestEntity;
@@ -122,8 +123,8 @@ public class MemeService {
         solrClient.commit();
     }
 
-    public List<TagEntity> getFacets() {
-        return tagRepository.countDistinctTag();
+    public List<Facets> getFacets() {
+        return tagRepository.derp();
     }
 
     private void getMemeAttributesAndAssociate(final List<String> memeIds, final List<MemeResponse> response) {
