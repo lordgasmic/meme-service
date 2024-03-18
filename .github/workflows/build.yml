@@ -16,7 +16,7 @@ jobs:
       output1: ${{ steps.step1.outputs.date }}
     steps:
       - id: step1
-        run: echo "::set-output name=date::lordgasmic/meme-service:$(date +%Y%m%d%H%M)"
+        run: echo "::set-output name=date::lordgasmic/meme-service"
 
   build:
     needs: vars
