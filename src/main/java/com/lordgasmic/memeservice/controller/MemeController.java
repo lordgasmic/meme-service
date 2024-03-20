@@ -52,6 +52,7 @@ public class MemeController {
 
     @PutMapping("/api/v1/index")
     public void updateIndex() throws IOException, InterruptedException, SolrServerException {
+        log.info("Updating index...");
         service.updateIndex();
     }
 
