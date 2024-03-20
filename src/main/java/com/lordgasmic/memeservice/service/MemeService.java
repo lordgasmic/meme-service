@@ -60,7 +60,7 @@ public class MemeService {
         this.pathRepository = pathRepository;
         this.requestRepository = requestRepository;
 
-        solrClient = new Http2SolrClient.Builder("http://192.168.1.163:8983/solr/memes").build();
+        solrClient = new Http2SolrClient.Builder("http://172.16.0.105:8983/solr/memes").build();
     }
 
     private static final Gson gson = new Gson();
